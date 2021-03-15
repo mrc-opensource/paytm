@@ -22,7 +22,10 @@ class Home extends React.Component {
   constructor() {
     super();
     this.submit = evt => {
-      console.log('total: ', this.props.receipts.reduce((a, b) => a + b.amountCAD, 0));
+      this.props.receipts.map((receipt, index) => {
+        console.log(`Receipt #${index}: `, receipt);
+      });
+      console.log('total: ', this.state.total);
     };
     this.addReceipt = (evt) => {
       this.props.addReceipt();
@@ -46,9 +49,9 @@ class Home extends React.Component {
           Total: {this.state.total}
         </div>
         {
-          this.state.isDisabled ?  <div className="error">
+          this.state.isDisabled &&  <div className="error">
             Expense Reporting Limit has been exceeded.
-          </div>: <div> hi</div>
+          </div>
         }
         <div>
           <Button onClick={this.addReceipt} variant="contained" color="primary">

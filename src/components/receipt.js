@@ -40,7 +40,7 @@ class Receipt extends React.Component {
     return (
         <>
             <div>
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">Description:</label>
                 <input
                     onChange={this.updateDescription}
                     value={this.state.description}
@@ -49,7 +49,7 @@ class Receipt extends React.Component {
                 />
             </div>
             <div>
-                <InputLabel id={CURRENCY_LABEL}>Currency</InputLabel>
+                <InputLabel id={CURRENCY_LABEL}>Currency:</InputLabel>
                 <Select
                     labelId={CURRENCY_LABEL}
                     value={this.state.currency}
@@ -61,7 +61,7 @@ class Receipt extends React.Component {
                 </Select>
             </div>
             <div>
-                <label htmlFor="amount">Description</label>
+                <label htmlFor="amount">Amount:</label>
                 <input
                     value={this.state.amount}
                     onChange={evt => this.handleChange(evt, 'amount')}
