@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<App /> renders without exploding 1`] = `
+<div>
+  <div
+    class="Home"
+  >
+    <div
+      class="Home-header"
+    >
+      <img
+        alt="logo"
+        class="Home-logo"
+        src="react.svg"
+      />
+      <h2>
+        Welcome to Razzle
+      </h2>
+    </div>
+    <p
+      class="Home-intro"
+    >
+      To get started, edit 
+      <code>
+        src/App.js
+      </code>
+       or
+       
+      <code>
+        src/Home.js
+      </code>
+       and save to reload.
+    </p>
+    <ul
+      class="Home-resources"
+    >
+      <li>
+        <a
+          href="https://github.com/jaredpalmer/razzle"
+        >
+          Docs
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/jaredpalmer/razzle/issues"
+        >
+          Issues
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://palmer.chat"
+        >
+          Community Slack
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
