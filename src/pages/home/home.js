@@ -27,20 +27,34 @@ class Home extends React.Component {
     this.addReceipt = (evt) => {
       this.props.addReceipt();
     }
+    console.log('this.props:', this.props);
+    this.state = {
+      isDisabled: false,
+      total: 0
+    };
   }
   render() {
-    console.log('receipts: ', this.props.receipts);
+    this.state.total = this.props.receipts.reduce((a, b) => a + b.amountCAD, 0);
+    this.state.isDisabled =this.state.total > 1000;
     return (
       <div className="Home2">
         <h1>Receipts</h1>
         {
-          this.props.receipts.map((receipt, key) => <Receipt receipt={receipt} receiptId={key} key={receipt.description+receipt.amount+receipt.currency+receipt.amountCAD} />)
+          this.props.receipts.map((receipt, key) => <Receipt receipt={receipt} receiptId={key} key={key} />)
+        }
+        <div>
+          Total: {this.state.total}
+        </div>
+        {
+          this.state.isDisabled ?  <div className="error">
+            Expense Reporting Limit has been exceeded.
+          </div>: <div> hi</div>
         }
         <div>
           <Button onClick={this.addReceipt} variant="contained" color="primary">
             Add Receipt
           </Button>
-          <Button onClick={this.submit} variant="contained" color="primary">
+          <Button onClick={this.submit} variant="contained" color="primary" disabled={this.state.isDisabled}>
             Submit
           </Button>
         </div>
@@ -54,6 +68,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 const mapStateToProps = (state, ownProps) => ({
-  receipts: getReceipts(state)
+  receipts: getReceipts(state),
+  isDisabled: false,
+  total: 0
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

@@ -14,53 +14,46 @@ import rates from '../services/rates';
 class Receipt extends React.Component {
   constructor() {
     super();
+    this.state = {
+        ...this.state
+    };
     this.updateDescription = (evt) => {
-        console.log('evt: ', evt.target.value);
-        this.props.setReceipt({
-            description: evt.target.value
-        });
+        this.state.description = evt.target.value;
     }
     this.handleChange = (evt, target) => {
-        console.log('this.props.receipt2:', target, this.props.receipt);
-        console.log('evt2: ', evt, evt.target, evt.target.value);
         const CURRENT_VALUE = target === 'amount' ? parseFloat(evt.target.value): evt.target.value;
-        if (!this.props.receipt.currency || !this.props.receipt.amount) {
-            console.log('set: ', {
-                [target]: CURRENT_VALUE
-            });
-            return this.props.setReceipt({
-                [target]: CURRENT_VALUE
-            });
+        this.state[target] = CURRENT_VALUE;
+    }
+    this.updateReceipt = () => {
+        if (!this.state.currency || !this.state.amount) {
+            return this.props.setReceipt(this.state);
         }
         rates().then(data => {
-            console.log('this.props.receipt:', this.props.receipt);
-            const amt = target === 'amount' ? parseFloat(CURRENT_VALUE): this.props.receipt.amount;
-            console.log('data.rates[this.props.currency]: ', data.rates, );
-            console.log('data.rates[this.props.currency]2: ', this.props.receipt.currency);
-            console.log('data.rates[this.props.currency]3: ',  data.rates[this.props.receipt.currency]);
-            const amountCAD = typeof amt !== 'number' ? null: amt * data.rates[this.props.receipt.currency];
-            this.props.setReceipt({
-                [target]: CURRENT_VALUE,
-                amountCAD
-            });
+            const amountCAD = typeof this.state.amount !== 'number' ? null: this.state.amount / data.rates[this.state.currency];
+            this.state.amountCAD = amountCAD;
+            this.props.setReceipt(this.state);
         });
     }
   }
   render() {
-      console.log('props: ', this.props.receipt)
-    const CURRENCY_LABEL = 'currency-label' + this.props.receiptId;
+    const CURRENCY_LABEL = 'currency-label' + this.stateId;
     return (
         <>
             <div>
                 <label htmlFor="description">Description</label>
-                <input onChange={this.updateDescription} value={this.props.receipt.description} name="description" />
+                <input
+                    onChange={this.updateDescription}
+                    value={this.state.description}
+                    name="description"
+                    onBlur={() => this.updateReceipt(true)}
+                />
             </div>
             <div>
                 <InputLabel id={CURRENCY_LABEL}>Currency</InputLabel>
                 <Select
                     labelId={CURRENCY_LABEL}
-                    value={this.props.receipt.currency}
-                    onChange={evt => this.handleChange(evt, 'currency')}
+                    value={this.state.currency}
+                    onChange={evt => { this.handleChange(evt, 'currency'); this.updateReceipt(true)}}
                 >
                     {
                         CURRENCIES.map(currency => <MenuItem value={currency} key={currency}>{currency}</MenuItem>)
@@ -69,9 +62,16 @@ class Receipt extends React.Component {
             </div>
             <div>
                 <label htmlFor="amount">Description</label>
-                <input value={this.props.receipt.amount} onChange={evt => this.handleChange(evt, 'amount')} type="number" step="0.01" name="amount" />
+                <input
+                    value={this.state.amount}
+                    onChange={evt => this.handleChange(evt, 'amount')}
+                    onBlur={() => this.updateReceipt(true)}
+                    type="number"
+                    step="0.01"
+                    name="amount"
+                />
             </div>
-            Amount in CAD: {this.props.receipt.amountCAD}
+            Amount in CAD: {this.state.amountCAD}
         </>
     );
   }
